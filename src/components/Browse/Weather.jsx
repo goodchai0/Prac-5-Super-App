@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import axios from "axios";
 const Weather = () => {
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
@@ -7,12 +7,17 @@ const Weather = () => {
   // console.log(weather)
   useEffect(() => {
     const fetchWeather = async () => {
-      await fetch(
-        "http://api.weatherapi.com/v1/current.json?key=987de39fe8924052ada80850232502&q=London&aqi=no"
-      )
-        .then(async (data) => await data.json())
-        .then((data) => setWeather(data));
+      try {
+        const response = await axios.get(
+          "http://api.weatherapi.com/v1/current.json?key=987de39fe8924052ada80850232502&q=London&aqi=no"
+        );
+        
+        setWeather(response.data);
+      } catch (error) {
+        console.error("Error fetching weather data:", error);
+      }
     };
+
     fetchWeather();
   }, []);
   useEffect(() => {

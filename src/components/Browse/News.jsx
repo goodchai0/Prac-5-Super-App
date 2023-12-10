@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import axios from "axios";
 const News = () => {
   const [news, setNews] = useState("");
   const [date, setDate] = useState("");
@@ -7,12 +7,17 @@ const News = () => {
   console.log(news);
   useEffect(() => {
     const fetchNews = async () => {
-      await fetch(
-        "https://newsapi.org/v2/everything?q=tesla&apiKey=4ef9b38002184be3bf2ccb7b066196af"
-      )
-        .then(async (data) => await data.json())
-        .then((res) => setNews(res.articles[0]));
+      try {
+        const response = await axios.get(
+          "https://newsapi.org/v2/everything?q=tesla&apiKey=4ef9b38002184be3bf2ccb7b066196af"
+        );
+
+        setNews(response.data.articles[0]);
+      } catch (error) {
+        console.error("Error fetching news data:", error);
+      }
     };
+
     fetchNews();
   }, []);
   useEffect(() => {
